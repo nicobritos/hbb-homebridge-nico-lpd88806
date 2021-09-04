@@ -214,20 +214,26 @@ export class LPD8806Accessory implements AccessoryPlugin {
      * @private
      */
     private refreshState(): void {
+        this.setRefreshState();
+
         LPD8806API.getState()
             .then(value => {
                 this.light.on = value.data.on;
-                this.light.brightness = value.data.color[2];
-                this.light.hue = value.data.color[0];
-                this.light.saturation = value.data.color[1];
+                this.light.brightness = value.data.color[2] || 0;
+                this.light.hue = value.data.color[0] || 0;
+                this.light.saturation = value.data.color[1] || 0;
 
-                this.service.updateCharacteristic(this.hap.Characteristic.On, this.light.on);
-                this.service.updateCharacteristic(this.hap.Characteristic.Brightness, this.light.brightness);
-                this.service.updateCharacteristic(this.hap.Characteristic.Hue, this.light.hue);
-                this.service.updateCharacteristic(this.hap.Characteristic.Saturation, this.light.saturation);
+                this.setRefreshState();
             })
             .catch(reason => {
                 this.log.error("Error getting state for light bulb: " + reason);
             });
+    }
+
+    private setRefreshState(): void {
+        this.service.updateCharacteristic(this.hap.Characteristic.On, this.light.on);
+        this.service.updateCharacteristic(this.hap.Characteristic.Brightness, this.light.brightness);
+        this.service.updateCharacteristic(this.hap.Characteristic.Hue, this.light.hue);
+        this.service.updateCharacteristic(this.hap.Characteristic.Saturation, this.light.saturation);
     }
 }
