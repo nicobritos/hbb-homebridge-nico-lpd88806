@@ -1,8 +1,8 @@
 export class LPD8806 {
-    private _on: boolean = false;
-    private _brightness: number = 0;
-    private _hue: number = 0;
-    private _saturation: number = 0;
+    private _on: boolean;
+    private _brightness: number;
+    private _hue: number;
+    private _saturation: number;
 
     public get on(): boolean {
         return this._on;
